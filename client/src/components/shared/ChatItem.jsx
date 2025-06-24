@@ -1,6 +1,8 @@
 import React, { memo } from 'react'
 import { Link } from '../styles/StyledComponents'
 import { Avatar, Box, Stack, Typography } from '@mui/material'
+import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
+import AvatarCard from './AvatarCard';
 const ChatItem = (
     {
         avatar = [],
@@ -11,12 +13,15 @@ const ChatItem = (
         isOnline,
         newMessageAlert,
         index = 0,
-        handleDeleteChatOpen,
+        handleDeleteChat,
 
     }
 ) => {
     return (
-        <Link to={`/chat/${_id}`} onContextMenu={(e)=>{handleDeleteChatOpen(e,_id,groupChat)}}>
+        <Link 
+        sx={{padding:0}}
+        to={`/chat/${_id}`} 
+        onContextMenu={(e)=>{handleDeleteChat(e,_id,groupChat)}}>
             <div style={{
                 display:'flex',
                 gap:'1rem',
@@ -26,16 +31,23 @@ const ChatItem = (
                 color:sameSender?'white':'unset',
                 position:'relative',
             }}>
-
-            {/*Avatar Card*/}
-            <Avatar src={avatar}/>
+            <AvatarCard avatar={avatar}/>
             <Stack>
                 <Typography>
                     {name}
                 </Typography>
                 {
                     newMessageAlert && (
-                        <Typography>{newMessageAlert.count} New Messages</Typography>
+                        <Typography sx={{
+                            display:'flex',
+                            alignItems:'center',
+                            gap:'0.4rem',}}>
+                            <CircleRoundedIcon
+                            sx={{
+                                height:'10px',
+                                width:'10px',}}
+                            />
+                            {newMessageAlert.count} New Messages</Typography>
                     )
                 }
             </Stack>

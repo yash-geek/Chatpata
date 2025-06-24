@@ -1,5 +1,5 @@
 import { Skeleton, Stack } from '@mui/material';
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 
 export const LayoutLoader = () => {
     const [width, setWidth] = useState(window.innerWidth)
@@ -39,7 +39,10 @@ export const LayoutLoader = () => {
             >
                 <Stack spacing={'9rem'} >
                     {Array.from({ length: 5 }).map((_, index) => {
-                        return <Skeleton key={index} variant='rounded' height={'8rem'} />
+                        return <Skeleton 
+                        key={index} 
+                        variant='rounded' 
+                        height={'8rem'} />
                     })}
 
                 </Stack>
@@ -53,10 +56,16 @@ export const LayoutLoader = () => {
             >
                 <Stack spacing={'0.7rem'} >
                     {Array.from({ length: 15 }).map((_, index) => {
-                        return <>
-                        <div key={index+16} style={{height:'9rem'}}></div>
-                        <Skeleton key={index + 32} variant='rounded' height={'7rem'} /></>
-                         
+                        return (
+                        <Fragment key={index}>
+                        <div  style={{height:'9rem'}}>
+
+                        </div>
+                        <Skeleton 
+                        variant='rounded' height={'7rem'} />
+                        
+                        </Fragment>  
+                        )
                     })}
 
                 </Stack>

@@ -20,12 +20,12 @@ const NotFound = lazy(
 let user = true;
 const App = () => {
   return (
-    <Router>
+    <Router >
       <Suspense fallback={<LayoutLoader/>}>
         <Routes>
           <Route element={<ProtectRoute user={user}/>}>
             <Route path='/' element={ <AppLayout Component={Home}/> } />
-            <Route path='/chat/:chatId' element={<Chat />} />
+            <Route path='/chat/:chatId' element={<AppLayout Component={Chat}/>} />
             <Route path='/Groups' element={<Groups />} />
           </Route>
 

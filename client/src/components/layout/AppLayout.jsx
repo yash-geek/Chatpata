@@ -3,9 +3,19 @@ import Header from './Header'
 import Title from '../shared/Title'
 import ChatList from '../specific/ChatList'
 import { sampleChat } from '../../constants/sampleData'
+import { useParams } from 'react-router-dom'
+import Profile from '../specific/Profile'
 
 const AppLayout = ({ Component, ...props }) => {
   const [width, setWidth] = useState(window.innerWidth)
+  const params = useParams();
+  const chatId = params.chatId;
+
+  const handleDeleteChat = (e, _id, groupChat) => {
+    e.preventDefault();
+    console.log(`Delete chat with id: ${_id}, groupChat: ${groupChat}`);
+
+  }
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth)
@@ -20,48 +30,54 @@ const AppLayout = ({ Component, ...props }) => {
 
       <div
         style={{
+          height: '90%',
           display: 'flex',
-          width: '100vw',
-          height: '100vh',
-          overflow: 'hidden',
-          gap:'1rem'
+          padding: 0,
+          margin: 0,
+          boxSizing: 'border-box',
         }}
       >
-        
+
+
         <div
           style={{
             flex: 1,
             display: width < 600 ? 'none' : 'block',
-            height: '100vh',
-            backgroundColor: '',
+            backgroundColor: 'rgba(0,0,0,0.15)',
           }}
         >
-          <ChatList chats={sampleChat}/>
+          <ChatList
+            chats={sampleChat}
+            chatId={chatId}
+            handleDeleteChat={handleDeleteChat}
+          />
         </div>
 
-        
+
         <div
           style={{
-            flex: 2,
-            height: '100%',
-            backgroundColor: '',
+            flex: 3,
+            display: width < 600 ? 'none' : 'block',
+            backgroundColor: 'rgba(0,0,0,0.05)',
+            
           }}
         >
           <Component {...props} />
         </div>
 
-        
+
         <div
           style={{
             flex: 1,
             display: width < 900 ? 'none' : 'block',
-            height: '100vh',
             backgroundColor: 'rgba(0,0,0,0.85)',
             color: 'white',
           }}
         >
-          Third
+          <Profile />
         </div>
+
+
       </div>
     </>
   )
