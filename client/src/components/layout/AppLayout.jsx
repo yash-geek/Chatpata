@@ -5,6 +5,9 @@ import ChatList from '../specific/ChatList'
 import { sampleChat } from '../../constants/sampleData'
 import { useParams } from 'react-router-dom'
 import Profile from '../specific/Profile'
+import {ArrowLeft, ArrowRight, Menu as MenuIcon} from '@mui/icons-material'
+import { Drawer, IconButton } from '@mui/material'
+import { grayBg } from '../../constants/color'
 
 const AppLayout = ({ Component, ...props }) => {
   const [width, setWidth] = useState(window.innerWidth)
@@ -23,7 +26,16 @@ const AppLayout = ({ Component, ...props }) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  const [isMobile,setIsMobile] = useState(false);
+  const handleMobile = ()=>{
+    setIsMobile((prev)=>!prev)
+  }
+  const closeHandler = ()=>{
+    setIsMobile(false)
+  }
+
   return (
+    
     <>
       <Title />
       <Header />
@@ -41,6 +53,7 @@ const AppLayout = ({ Component, ...props }) => {
 
         <div
           style={{
+            
             flex: 1,
             display: width < 600 ? 'none' : 'block',
             backgroundColor: 'rgba(0,0,0,0.15)',
@@ -56,12 +69,56 @@ const AppLayout = ({ Component, ...props }) => {
 
         <div
           style={{
+            position:'relative',
             flex: 3,
-            display: width < 600 ? 'none' : 'block',
+            display:'block',
             backgroundColor: 'rgba(0,0,0,0.05)',
             
           }}
         >
+          
+          
+          {
+          <IconButton
+          
+          sx={{
+            position:'fixed',
+            top:'10rem' ,
+            left:'2rem',
+            cursor:'pointer',
+            display:{
+              xs:'block',
+              sm:'none',
+            },
+            backgroundColor:grayBg,
+            padding:'10px'
+          
+          }}
+          onClick={handleMobile}
+          >
+            <ArrowRight
+            sx={{
+              scale:2
+            }}
+            />
+            
+          </IconButton>
+          }
+          <Drawer open={isMobile}
+          sx={{
+            width:'fit-content'
+          }}
+          onClose={closeHandler}
+          >
+            <ChatList
+            chats={sampleChat}
+            chatId={chatId}
+            handleDeleteChat={handleDeleteChat}
+          />
+          </Drawer>
+
+
+
           <Component {...props} />
         </div>
 

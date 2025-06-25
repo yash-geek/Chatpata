@@ -303,7 +303,11 @@ const Groups = () => {
 }
 const GroupsList = ({ w = '100%', myGroups = [], chatId }) => {
   return (
-    <Stack width={w}>
+    <Stack 
+    width={w}
+    height={'100vh'}
+    overflow={'auto'}
+    >
       {
         myGroups.length > 0 ?
           (
