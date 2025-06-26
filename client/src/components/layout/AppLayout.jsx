@@ -6,7 +6,7 @@ import { sampleChat } from '../../constants/sampleData'
 import { useParams } from 'react-router-dom'
 import Profile from '../specific/Profile'
 import {ArrowLeft, ArrowRight, Menu as MenuIcon} from '@mui/icons-material'
-import { Drawer, IconButton } from '@mui/material'
+import { Box, Drawer, IconButton } from '@mui/material'
 import { grayBg } from '../../constants/color'
 
 const AppLayout = ({ Component, ...props }) => {
@@ -26,13 +26,7 @@ const AppLayout = ({ Component, ...props }) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const [isMobile,setIsMobile] = useState(false);
-  const handleMobile = ()=>{
-    setIsMobile((prev)=>!prev)
-  }
-  const closeHandler = ()=>{
-    setIsMobile(false)
-  }
+
 
   return (
     
@@ -42,7 +36,7 @@ const AppLayout = ({ Component, ...props }) => {
 
       <div
         style={{
-          height: '90%',
+          height: 'calc(100vh - 4rem)',
           display: 'flex',
           padding: 0,
           margin: 0,
@@ -51,88 +45,59 @@ const AppLayout = ({ Component, ...props }) => {
       >
 
 
-        <div
-          style={{
+        <Box
+          sx={{
             
-            flex: 1,
-            display: width < 600 ? 'none' : 'block',
-            backgroundColor: 'rgba(0,0,0,0.15)',
+            flex: {
+              sm:1,
+              md:3,
+              lg:3
+            },
+            display: {xs:'none', sm:'block'},
           }}
+          height={'100%'}
         >
+          
           <ChatList
             chats={sampleChat}
             chatId={chatId}
             handleDeleteChat={handleDeleteChat}
           />
-        </div>
+        </Box>
 
 
-        <div
-          style={{
-            position:'relative',
-            flex: 3,
+        <Box
+          sx={{
+            flex: {
+              xs:1,
+              sm:2,
+              md:5,
+              lg:6
+            },
             display:'block',
             backgroundColor: 'rgba(0,0,0,0.05)',
-            
           }}
+          height={'100%'}
         >
-          
-          
-          {
-          <IconButton
-          
-          sx={{
-            position:'fixed',
-            top:'10rem' ,
-            left:'2rem',
-            cursor:'pointer',
-            display:{
-              xs:'block',
-              sm:'none',
-            },
-            backgroundColor:grayBg,
-            padding:'10px'
-          
-          }}
-          onClick={handleMobile}
-          >
-            <ArrowRight
-            sx={{
-              scale:2
-            }}
-            />
-            
-          </IconButton>
-          }
-          <Drawer open={isMobile}
-          sx={{
-            width:'fit-content'
-          }}
-          onClose={closeHandler}
-          >
-            <ChatList
-            chats={sampleChat}
-            chatId={chatId}
-            handleDeleteChat={handleDeleteChat}
-          />
-          </Drawer>
-
-
-
           <Component {...props} />
-        </div>
+        </Box>
 
 
-        <div
-          style={{
-            flex: 1,
-            display: width < 900 ? 'none' : 'block',
+        <Box
+          height={'100%'}
+          sx={{
+            flex: {
+              md:4,
+              lg:3
+            },
+            display: {xs:'none',md:'block'},
+            padding:'2rem',
             backgroundColor: 'rgba(0,0,0,0.85)',
             color: 'white',
           }}
         >
           <Profile />
-        </div>
+        </Box>
 
 
       </div>

@@ -63,8 +63,8 @@ const AdminLayout = ({ component: Component, ...props }) => {
         <div
 
             style={{
-                minHeight: '100vh',
-                display: 'flex',
+                height:'100vh',
+                display: 'flex'
             }}
         >
 

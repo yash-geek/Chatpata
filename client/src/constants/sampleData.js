@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const sampleChat = [
     {
         avatar: ['https://avatars.githubusercontent.com/u/16500619?v=4'],
@@ -102,6 +104,117 @@ export const sampleMessage = [
 ];
 
 export const sampleUser = {
-    _id:'curr_user_82hn',
-    name:'Yash'
+    _id: 'curr_user_82hn',
+    name: 'Yash'
+}
+export const dashboardData = {
+    users: [
+        {
+            _id: '1',
+            avatar: ['https://avatars.githubusercontent.com/u/16500619?v=4'],
+            name: 'Itachi Uchiha',
+            username:'uchiha_here',
+            friends:20,
+            groups:5,
+            joindate:moment().format('DD MM YYYY'),
+        },
+        {
+            name: 'Gojo Satoru',
+            avatar: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnTGQ9qENyTQURr5wi2oK-6Bc-qgJRXdxgvZ4bSyMGw1jnULbiCoE_UQXWGLdN2ADVzAk&usqp=CAU'],
+            _id: '2',
+            username:'the_honored_one',
+            friends:35,
+            groups:2,
+            joindate:moment().format('DD MM YYYY'),
+        }
+    ],
+    chats:[
+        {
+            name: 'Friends Forever',
+            _id: '1',
+            avatar: ['https://avatars.githubusercontent.com/u/16500619?v=4',
+                'https://avatars.githubusercontent.com/u/16500619?v=4',
+                'https://static.wikia.nocookie.net/villains/images/6/65/Walter_White2.jpg'
+
+            ],
+            members:[
+                {
+                _id:'1',
+                avatar:'https://avatars.githubusercontent.com/u/16500619?v=4'
+                },
+                {
+                _id:'2',
+                avatar:'https://avatars.githubusercontent.com/u/16500619?v=4'
+                }
+            ],
+            totalMembers:2,
+            totalMessages:20,
+            creator:{
+                name:'john Doe',
+                avatar:'https://www.w3schools.com/howto/img_avatar.png'
+            }
+        },
+        {
+            name: 'Group Number 1',
+            _id: '2',
+            avatar: ['https://avatars.githubusercontent.com/u/16500619?v=4'],
+            members:[
+                {
+                _id:'1',
+                avatar:'https://avatars.githubusercontent.com/u/16500619?v=4'
+                },
+                {
+                _id:'2',
+                avatar:'https://avatars.githubusercontent.com/u/16500619?v=4'
+                },
+                {
+                _id:'3',
+                avatar:'https://avatars.githubusercontent.com/u/16500619?v=4'
+                },
+                {
+                _id:'4',
+                avatar:'https://avatars.githubusercontent.com/u/16500619?v=4'
+                }
+            ],
+            totalMembers:4,
+            totalMessages:244,
+            creator:{
+                name:'john Wick',
+                avatar:'https://www.w3schools.com/howto/img_avatar.png'
+            }
+        }
+    ],
+    messages:[
+        {
+            attachments:[],
+            content:'A guy opens his door ans gets shot, and you think that of me? No. I am the one who knocks!',
+            _id:'wugegw9hce',
+            sender:{
+                avatar:'https://www.massappealdesigns.com/wp-content/uploads/2013/10/BREAKING-BAD-INSPIRED-DESIGN-ARTWORK1.jpg',
+                name:'Walter White',
+            },
+            chat:'chatId',
+            groupChat:false,
+            createdAt:'2024-02-12',
+        },
+        {
+            attachments:[
+                {
+                    public_id:'cwe9hech38',
+                    url:'https://www.massappealdesigns.com/wp-content/uploads/2013/10/BREAKING-BAD-INSPIRED-DESIGN-ARTWORK1.jpg'
+                }
+            ],
+            content:'A guy opens his door ans gets shot, and you think that of me? No. I am the one who knocks!',
+            _id:'wugegvw9hce',
+            sender:{
+                avatar:'https://www.massappealdesigns.com/wp-content/uploads/2013/10/BREAKING-BAD-INSPIRED-DESIGN-ARTWORK1.jpg',
+                name:'Walter White',
+            },
+            chat:'chatId',
+            groupChat:true,
+            createdAt:'2024-02-12',
+        },
+
+
+    ]
 }
