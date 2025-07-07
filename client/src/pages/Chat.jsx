@@ -149,19 +149,17 @@ const Chat = ({ chatId, user }) => {
   return (
 
     chatDetails.isLoading ? <LayoutLoader /> : <>
-      <Stack
-        boxSizing={'border-box'}
-        padding={'1rem'}
-        spacing={'1rem'}
-        ref={containerRef}
-        bgcolor={grayColor}
-        height={'90%'}
-        sx={{
-          overflowY: 'auto',
-          overflowX: 'hidden',
-        }}
-
-      >
+<Stack
+  ref={containerRef}
+  padding="1rem"
+  spacing="1rem"
+  bgcolor={grayColor}
+  sx={{
+    height: 'calc(100vh - 64px)', // Adjust based on input height
+    overflowY: 'auto',
+    overflowX: 'hidden',
+  }}
+>
         {
           allMessages.length > 0 ? allMessages.map(
             (i) => {
@@ -219,11 +217,18 @@ const Chat = ({ chatId, user }) => {
 
 
 
-      <form style={{
-        height: '10%',
-      }}
-        onSubmit={sendMessage}
-      >
+<form
+  onSubmit={sendMessage}
+  style={{
+    height:'70px',
+    position: 'sticky',
+    bottom: 0,
+    zIndex: 10,
+    backgroundColor: 'white',
+    borderTop: '1px solid #ddd',
+  }}
+>
+
 
         <Stack
           height={'100%'}
@@ -244,6 +249,7 @@ const Chat = ({ chatId, user }) => {
             <AttachFileIcon />
           </IconButton>
           <InputBox
+            
             placeholder='Type Message Here...' value={message}
             onChange={messageOnChangeHandler} />
           <IconButton type='submit' sx={{
