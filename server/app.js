@@ -27,7 +27,7 @@ dotenv.config({
 })
 
 
-const mongoURI = process.env.MONGO_URI_LOCAL
+const mongoURI = process.env.MONGO_URI
 connectDB(mongoURI)
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
