@@ -32,13 +32,22 @@ const SearchDialog = () => {
   }, [search.value])
 
   return (
-    <Dialog open={isSearch} onClose={searchCloseHandler}>
-      <Stack
+    <Dialog  
+    sx={{
+      display:'flex',
+      justifyContent:'center',
+      alignItems:'center',
+      width:'100%',
+      
+    }}
+    open={isSearch} onClose={searchCloseHandler}>
+      <Stack 
         sx={{
-          width: '25rem',
-          padding: '2rem',
+          width: {sm:'22rem',md:'25rem'},
+          padding: '2rem 0',
           backgroundColor: '#f0f0f0',
         }}
+        alignItems={'center'}
         direction={'column'}
         spacing={2}
       >
@@ -48,6 +57,9 @@ const SearchDialog = () => {
           Find People
         </DialogTitle>
         <TextField
+          sx={{
+            maxWidth:'90%',
+          }}
           label=''
           value={search.value}
           onChange={search.changeHandler}
@@ -61,7 +73,13 @@ const SearchDialog = () => {
             ),
           }}
         />
-        <List>
+        <List
+        sx={{
+          maxHeight:'50vh',
+          overflow:'auto',
+          
+        }}
+        >
           {
             users.map((i) => {
               return (

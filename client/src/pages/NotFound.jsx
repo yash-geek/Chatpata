@@ -21,7 +21,7 @@ const NotFound = () => {
         height:'20%',
         opacity:'0.8'
       }}
-      src="https://play-lh.googleusercontent.com/yT_LBq_tyKeIDohKDsqN_Qt18jGIPUYIxY2C-1-E2YA9Qd60uZW08pua17qBmIiDPA" alt="" />
+      src="https://play-lh.googleusercontent.com/yT_LBq_tyKeIDohKDsqN_Qt18jGIPUYIxY2C-1-E2YA9Qd60uZW08pua17qBmIiDPA" alt="Not Found Img!" />
       <Typography 
       textAlign={'center'} 
       width={'100%'} 
