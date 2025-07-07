@@ -9,18 +9,32 @@ import {
     TextField,
     Typography
 } from '@mui/material'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 import { bluey } from '../../constants/color'
-const isAdmin = false;
+import { adminLogin, getAdmin } from '../../redux/reducers/thunks/admin'
+
 const AdminLogin = () => {
     // const username = useInputValidation('', userNameValidator)
 
+    const dispatch = useDispatch();
+    const {isAdmin} = useSelector((state)=>state.auth)
+    
     const secretKey = useInputValidation('')
 
     const submitHandler = (e)=>{
         e.preventDefault();
+        dispatch(adminLogin(secretKey.value))
+
     }
+
+    useEffect(()=>{
+        dispatch(getAdmin())
+    },[])
+
     if(isAdmin) return <Navigate to={'/admin/dashboard'}/>
+
     return (
     <Box
         sx={{

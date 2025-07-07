@@ -1,7 +1,9 @@
 import { Skeleton, Stack } from '@mui/material';
+import {SyncLoader} from 'react-spinners'
 import React, { Fragment, useEffect, useState } from 'react'
+import {blueyDarker } from '../../constants/color';
 
-export const LayoutLoader = () => {
+const LayoutLoader = () => {
     const [width, setWidth] = useState(window.innerWidth)
 
     useEffect(() => {
@@ -83,3 +85,29 @@ export const LayoutLoader = () => {
         </div>
     )
 };
+const TypingLoader = ()=>{
+    return (
+        <div
+        style={{
+            display:'flex',
+            alignItems:'center',
+            gap:'0.7rem',
+            color:blueyDarker,
+        }}
+        >
+        <span
+        style={{
+            fontFamily:'monospace'
+        }}
+        >Typing</span>
+        <SyncLoader
+        color={blueyDarker}
+        size={'0.4rem'}
+        />
+        </div>
+    )
+}
+export {
+    TypingLoader,
+    LayoutLoader,
+}

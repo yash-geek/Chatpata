@@ -14,6 +14,12 @@ const schema = new Schema({
         type: Types.ObjectId, 
         ref:"User",
     },
+    admins:[
+        {
+            type: Types.ObjectId, 
+            ref:"User",
+        },
+    ],
     members:[
         {
             type: Types.ObjectId, 

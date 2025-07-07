@@ -1,8 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material'
-import { Stack } from '@mui/system'
-import React from 'react'
 
-const confirmDeleteDialog = ({ message,open, handleClose, deleteHandler }) => {
+const confirmDialog = ({ message,open, handleClose, confirmHandler }) => {
     return (
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Confirm Delete</DialogTitle>
@@ -13,7 +11,7 @@ const confirmDeleteDialog = ({ message,open, handleClose, deleteHandler }) => {
             direction={'row'} 
             p={'1rem'} >
                 <Button 
-                onClick={deleteHandler}
+                onClick={confirmHandler}
                 color='error'>Confirm</Button>
                 <Button
                 onClick={handleClose}
@@ -23,4 +21,4 @@ const confirmDeleteDialog = ({ message,open, handleClose, deleteHandler }) => {
     )
 }
 
-export default confirmDeleteDialog
+export default confirmDialog

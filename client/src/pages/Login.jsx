@@ -1,22 +1,28 @@
-import React, { useState } from 'react'
+import { useFileHandler, useInputValidation } from '6pp'
+import { CameraAlt } from '@mui/icons-material'
 import {
+  Avatar,
+  Box,
+  Button,
   Container,
+  IconButton,
   Paper,
+  Stack,
   TextField,
   Typography,
-  Button,
-  Stack,
-  Avatar,
-  IconButton,
-  Box,
 } from '@mui/material'
-import { CameraAlt } from '@mui/icons-material'
+import axios from 'axios'
+import { useState } from 'react'
+import toast from 'react-hot-toast'
+import { useDispatch } from 'react-redux'
 import { VisuallyHiddenInput } from '../components/styles/StyledComponents'
-import { useFileHandler, useInputValidation } from '6pp'
+import { server } from '../constants/config'
+import { userExists } from '../redux/reducers/auth'
 import { userNameValidator } from '../utils/validators'
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const toggleLogin = () => setIsLogin((prev) => !prev)
 
   const name = useInputValidation('')
@@ -25,13 +31,67 @@ const Login = () => {
   const password = useInputValidation('')
 
   const avatar = useFileHandler('single')
+  const dispatch = useDispatch()
 
-  const handleLogin = (e) => {
-    e.preventDefault()
+  const handleLogin = async (e) => {
+
+    e.preventDefault();
+    const toastId = toast.loading("Logging In...");
+    setIsLoading(true);
+    const config = {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+    try {
+      const { data } = await axios.post(`${server}/api/v1/user/login`, {
+        username: username.value,
+        password: password.value,
+
+      }, config);
+      dispatch(userExists(data.user))
+      toast.success(data.message,{id:toastId })
+
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Something went wrong", {id:toastId})
+    } finally{
+      setIsLoading(false)
+    }
   }
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault()
+    const toastId = toast.loading("Signing Up...");
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append("avatar", avatar.file);
+    formData.append("name", name.value);
+    formData.append("bio", bio.value);
+    formData.append("username", username.value);
+    formData.append("password", password.value);
+
+    try {
+      const config = {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }
+      const { data } = await axios.post(
+        `${server}/api/v1/user/new`,
+        formData,
+        config
+      );
+      dispatch(userExists(data.user));
+      toast.success(data.message, {id:toastId})
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Something went wrong", {id:toastId});
+    } finally{
+      setIsLoading(false);
+    }
+
+
   }
 
   return (
@@ -84,6 +144,7 @@ const Login = () => {
                   onChange={password.changeHandler}
                 />
                 <Button
+                disabled={isLoading}
                   type="submit"
                   variant="contained"
                   color="primary"
@@ -97,7 +158,10 @@ const Login = () => {
                   OR
                 </Typography>
 
-                <Button variant="text" fullWidth onClick={toggleLogin}>
+                <Button 
+                disabled={isLoading}
+                variant="text" 
+                fullWidth onClick={toggleLogin}>
                   Create Account
                 </Button>
               </Box>
@@ -200,6 +264,7 @@ const Login = () => {
                 />
 
                 <Button
+                  disabled={isLoading}
                   type="submit"
                   variant="contained"
                   color="primary"
@@ -213,7 +278,11 @@ const Login = () => {
                   OR
                 </Typography>
 
-                <Button variant="text" fullWidth onClick={toggleLogin}>
+                <Button 
+                disabled={isLoading}
+                variant="text" 
+                fullWidth 
+                onClick={toggleLogin}>
                   Login Instead
                 </Button>
               </Box>

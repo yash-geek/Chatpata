@@ -3,26 +3,27 @@ import { ErrorHandler } from "../utils/utility.js";
 const validateHandler = (req, res, next) => {
     const errors = validationResult(req)
     const errorMessage = errors.array().map((error) => error.msg).join(", ") //array of errormessag
-
     if (errors.isEmpty())
         return next()
     else
-        next(new ErrorHandler(errorMessage, 400))
+        return next(new ErrorHandler(errorMessage, 400))
 }
 const registerValidator = () => [
     body("name", "Please Enter Name").notEmpty(),
     body("username")
         .notEmpty()
-        .withMessage("Enter valid username"),
+        .withMessage("Enter valid username")
+        .isLowercase()
+        .withMessage("Uppercase letters are not allowed in username"),
     body("bio", "Please Enter Bio").notEmpty(),
-        // .isLowercase()
-        // .withMessage("Uppercase letters are not allowed in username"),
     body("password", "Please Enter Password").notEmpty(),
 ];
 const loginValidator = () => [
     body("username")
         .notEmpty()
-        .withMessage("Enter valid username"),
+        .withMessage("Enter valid username")
+        .isLowercase()
+        .withMessage("Uppercase letters are not allowed in username"),
     body("password", "Please Enter Password").notEmpty(),
 ];
 const newGroupValidator = () => [
@@ -44,13 +45,16 @@ const addMemberValidator = () => [
 const removeMemberValidator = () => [
     body("chatId", "Please Enter Chat ID").notEmpty(),
     body("userId", "Please Enter User ID").notEmpty(),
-    
+
 ];
 const sendAttachmentsValidator = () => [
     body("chatId", "Please Enter Chat ID").notEmpty()
 ];
 const chatIdValidator = () => [
     param("id", "Please Enter Chat ID").notEmpty(),
+];
+const addAdminValidator = () => [
+    body("chatId", "Please Enter Chat ID").notEmpty(),
 ];
 const renameValidator = () => [
     param("id", "Please Enter Chat ID").notEmpty(),
@@ -62,11 +66,11 @@ const sendRequestValidator = () => [
 const acceptRequestValidator = () => [
     body("requestId", "Please Enter request Id").notEmpty(),
     body("accept")
-    .notEmpty()
-    .withMessage("Please Accept or Reject")
-    .isBoolean()
-    .withMessage("Accept must be boolean"),
-  ,
+        .notEmpty()
+        .withMessage("Please Accept or Reject")
+        .isBoolean()
+        .withMessage("Accept must be boolean"),
+    ,
 ];
 const adminLoginValidator = () => [
     body("secretKey", "Please Enter Secret Key").notEmpty(),
@@ -83,9 +87,10 @@ export {
     removeMemberValidator,
     sendAttachmentsValidator,
     chatIdValidator,
-    renameValidator, 
+    renameValidator,
     sendRequestValidator,
     acceptRequestValidator,
     adminLoginValidator,
+    addAdminValidator,
 
 }

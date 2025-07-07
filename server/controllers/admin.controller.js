@@ -45,7 +45,7 @@ const getAdminData = TryCatch(
 const allUsers = TryCatch(
     async (req,res,next)=>{
         const users = await User.find({});
-        const transformedUsers = await Promise.all(users.map(async ({name,username,avatar,_id})=>{
+        const transformedUsers = await Promise.all(users.map(async ({name,username,avatar,_id, createdAt})=>{
             const [groups, friends]  = await Promise.all([
                 Chat.countDocuments({
                 groupChat: true,
@@ -63,6 +63,7 @@ const allUsers = TryCatch(
                 _id,
                 groups,
                 friends,
+                createdAt,
             }
         }))
         return res.status(200).json({
@@ -112,24 +113,25 @@ const allMessages = TryCatch(
         const messages = await Message.find({})
         .populate('sender','name avatar')
         .populate('chat','groupChat')
+        console.count("console")
         const transformedMessages = messages.map((
             {_id, 
             sender, 
             content, 
             chat,
-            attachements, 
+            attachments, 
             createdAt})=>{
             return {
             _id,
-            attachements:attachements || [],
+            attachments:attachments || [],
             content,
             sender:{
-                _id: sender._id,
-                name:sender.name,
-                avatar:sender.avatar.url,
+                _id: sender?._id,
+                name:sender?.name,
+                avatar:sender?.avatar.url,
             },
-            chat:chat._id,
-            groupChat:chat.groupChat,
+            chat:chat?._id,
+            groupChat:chat?.groupChat,
             time:createdAt,
             }
         })

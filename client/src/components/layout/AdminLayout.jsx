@@ -1,12 +1,12 @@
-import { Box, styled } from '@mui/material';
-import React, { useState } from 'react';
-import { grayColor, matBlack } from '../../constants/color';
 import { Close as CloseIcon, ExitToApp as ExitToAppIcon, Menu as MenuIcon } from "@mui/icons-material";
-import IconButton from '@mui/material/IconButton';
+import { Box, styled } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import { useLocation, Link as LinkComponent, Navigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
+import { Link as LinkComponent, Navigate, useLocation } from 'react-router-dom';
+import { grayColor, matBlack } from '../../constants/color';
 
 const Link = styled(LinkComponent)`
     text-decoration:none;
@@ -18,12 +18,14 @@ const Link = styled(LinkComponent)`
     }
 `
 
-import { 
-    Dashboard as DashboardIcon, ManageAccounts as ManageAccountsIcon,
+import {
+    Dashboard as DashboardIcon,
     Group as GroupIcon,
+    ManageAccounts as ManageAccountsIcon,
     Message as MessageIcon
-
 } from "@mui/icons-material";
+import { useDispatch, useSelector } from 'react-redux';
+import { adminLogout } from '../../redux/reducers/thunks/admin';
 
 const adminTabs = [
     {
@@ -49,8 +51,9 @@ const adminTabs = [
 
 ]
 
-const isAdmin = true
+
 const AdminLayout = ({ component: Component, ...props }) => {
+    const {isAdmin} = useSelector((state)=>state.auth)
     const [isMobile, setIsMobile] = useState(false);
     const handleMobile = () => {
         setIsMobile((prev) => !prev)
@@ -59,6 +62,7 @@ const AdminLayout = ({ component: Component, ...props }) => {
         setIsMobile(false)
     }
     if(!isAdmin)    return <Navigate to={'/admin'}/>
+
     return (
         <div
 
@@ -134,8 +138,9 @@ const AdminLayout = ({ component: Component, ...props }) => {
 
 const Sidebar = ({ w = '100%', minWidth = w }) => {
     const location = useLocation();
+    const dispatch = useDispatch();
     const logoutHandler=()=>{
-
+        dispatch(adminLogout());
     }
     return (
         <Stack

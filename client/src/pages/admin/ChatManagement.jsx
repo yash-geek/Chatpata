@@ -1,11 +1,12 @@
-import { Avatar } from '@mui/material';
+import { Avatar, Skeleton } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Table from '../../components/shared/Table';
 
 import { Stack } from '@mui/system';
 import AvatarCard from '../../components/shared/AvatarCard';
-import { dashboardData } from '../../constants/sampleData';
+import { useErrors } from '../../hooks/hook';
 import { transformImage } from '../../lib/features';
+import { useGetAdminChatsQuery } from '../../redux/api/api';
 const columns = [
   {
   field:'id',
@@ -25,6 +26,12 @@ const columns = [
   {
   field:'name',
   headerName:'Name',
+  headerClassName:'table-header',
+  width:'300',
+  },
+  {
+  field:'groupChat',
+  headerName:'Group',
   headerClassName:'table-header',
   width:'300',
   },
@@ -74,10 +81,19 @@ const columns = [
 
 
 const ChatManagement = () => {
+  const { isLoading, data, isError, error } = useGetAdminChatsQuery(undefined,{refetchOnMountOrArgChange:true})
+    const errors = [
+      {
+        isError,
+        error
+      }
+    ]
+  useErrors(errors)
   const [rows,setRows] = useState([]);
   useEffect(()=>{
+    if(data)
     setRows(
-      dashboardData.chats.map(i=>({
+      data?.chats?.map(i=>({
         ...i,
         id:i._id,
         avatar:i.avatar.map(av=>transformImage(av,50)),
@@ -85,11 +101,14 @@ const ChatManagement = () => {
         creator:{
           name:i.creator.name,
           avatar:transformImage(i.creator.avatar,50),
-        }
+        },
+        groupChat:i.groupChat?'Yes':'No'
       }))
     )
-  },[])
+  },[data])
   return (
+    isLoading?
+    <Skeleton height={'100vh'}/>:
     <Table 
     heading={'All Chats'}
     columns={columns}

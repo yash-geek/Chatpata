@@ -1,6 +1,6 @@
 import express from 'express';
-import { addMembers, deleteChat, getChatDetails, getMessages, getMyChats, getMyGroups, leaveGroup, newGroupChat, removeMember, renameGroup, sendAttachments } from '../controllers/chat.js';
-import { addMemberValidator, chatIdValidator, newGroupValidator, removeMemberValidator, renameValidator, sendAttachmentsValidator, validateHandler } from '../lib/validators.js';
+import { addAdmin, removeAdmin, addMembers, deleteChat, getChatDetails, getMessages, getMyChats, getMyGroups, leaveGroup, newGroupChat, removeMember, renameGroup, sendAttachments } from '../controllers/chat.js';
+import { addAdminValidator, addMemberValidator, chatIdValidator, newGroupValidator, removeMemberValidator, renameValidator, sendAttachmentsValidator, validateHandler } from '../lib/validators.js';
 import { isAuthenticated } from '../middlewares/auth.js';
 import { attachmentMulter } from '../middlewares/multer.js';
 
@@ -26,6 +26,8 @@ app.post('/message',attachmentMulter,
 // get messages
 app.get('/message/:id', chatIdValidator(), validateHandler, getMessages);
 // get chat detail, rename, delete
+app.put('/addadmin',addAdminValidator(),validateHandler,addAdmin)
+app.put('/removeadmin',addAdminValidator(),validateHandler,removeAdmin)
 app.route('/:id')
 .get(chatIdValidator(), validateHandler,getChatDetails)
 .put(renameValidator(), validateHandler, renameGroup)

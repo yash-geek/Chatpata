@@ -5,13 +5,23 @@ import moment from 'moment/moment';
 import { Box } from '@mui/system';
 import { fileFormat } from '../../lib/features';
 import RenderAttachment from './RenderAttachment';
-
+import {motion} from 'framer-motion'
+ 
 const MessageComponent = ({message,user}) => {
     const {sender,content,attachments = [],createdAt} = message;
     const sameSender = sender?._id === user?._id
-    const timeAgo = `${moment(createdAt).hour()}:${moment(createdAt).minute()}`
+    const timeAgo = moment(createdAt).format("HH:mm");
+
   return (
-    <div
+    <motion.div
+    initial={{
+        opacity:'0.1',
+        x:'-100%'
+    }}
+    whileInView={{
+        opacity:'1',
+        x:0,
+    }}
     style={{
         alignSelf:sameSender?'flex-end':'flex-start',
         backgroundColor:'white',
@@ -19,7 +29,9 @@ const MessageComponent = ({message,user}) => {
         borderRadius:'5px',
         padding:'0.5rem',
         width:'fit-content',
-        maxWidth:'500px'
+        height:'100%',
+        maxWidth:'500px',
+        minWidth:'100px'
     }}
     >
        {
@@ -58,9 +70,13 @@ const MessageComponent = ({message,user}) => {
        {
         content && <Typography>{content}</Typography>
        }
-       <Typography variant='caption' color='text.secondary'>{timeAgo}</Typography>
+       <Typography 
+       variant='caption' 
+       color='text.secondary'
+       fontSize='0.5rem'
+       >{timeAgo}</Typography>
 
-    </div>
+    </motion.div>
   )
 }
 

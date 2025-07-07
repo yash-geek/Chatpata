@@ -1,12 +1,13 @@
-import { Avatar, Collapse } from '@mui/material';
-import { useEffect, useState } from 'react';
-import Table from '../../components/shared/Table';
-import { ThumbUpOffAlt,ThumbDownOffAlt, ThumbUp } from "@mui/icons-material";
+import { ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
+import { Avatar, Skeleton } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import { dashboardData } from '../../constants/sampleData';
-import { fileFormat, transformImage } from '../../lib/features';
 import moment from 'moment';
-import RenderAttachment from '../../components/shared/RenderAttachment'
+import { useEffect, useState } from 'react';
+import RenderAttachment from '../../components/shared/RenderAttachment';
+import Table from '../../components/shared/Table';
+import { useErrors } from '../../hooks/hook';
+import { fileFormat, transformImage } from '../../lib/features';
+import { useGetAdminMessagesQuery } from '../../redux/api/api';
 
 const columns = [
   {
@@ -81,13 +82,22 @@ const columns = [
   field:'createdAt',
   headerName:'Time',
   headerClassName:'table-header',
-  width:'100',
+  width:'200',
   },
 ]
 const MessageManagement = () => {
+  const { isLoading, data, isError, error } = useGetAdminMessagesQuery(undefined,{refetchOnMountOrArgChange:true})
+      const errors = [
+        {
+          isError,
+          error
+        }
+      ]
+  useErrors(errors)
   const [rows,setRows] = useState([]);
   useEffect(()=>{
-    setRows(dashboardData.messages.map(i=>({
+    if(data)
+    setRows(data?.messages?.map(i=>({
       ...i,
       id:i._id,
       sender:{
@@ -96,14 +106,15 @@ const MessageManagement = () => {
       },
       createdAt:moment(i.createdAt).format('MMMM Do YYYY,h:mm:ss a')
     })))
-  },[])
+  },[data])
   return (
+    isLoading?
+    <Skeleton height={'100vh'}/>:
     <Table 
     heading={'All Messages'}
     columns={columns}
     rows={rows}
     rowHeight={200}
-
     />
   )
 }

@@ -7,8 +7,23 @@ import moment from 'moment'
 import { CurveButton, SearchField } from '../../components/styles/StyledComponents'
 import { matBlack } from '../../constants/color'
 import { DoughnutChart, LineChart } from '../../components/specific/Charts'
+import { useAdminStatsQuery } from '../../redux/api/api'
+import { useErrors } from '../../hooks/hook'
+import { LayoutLoader } from '../../components/layout/Loaders'
+
 
 const Dashboard = () => {
+
+    const {isLoading, data, isError, error} = useAdminStatsQuery()
+    const errors = [
+        {
+            isError,
+            error
+        }
+    ]
+    useErrors(errors)
+    const stats = data?.stats || {}
+
     const Appbar = <Paper 
     elevation={3}
     sx={{
@@ -67,21 +82,22 @@ const Dashboard = () => {
     >
         <Widget 
         title={'Users'} 
-        value={34}
+        value={stats?.usersCount || 0}
         Icon={<PersonIcon/>}
         />
         <Widget 
         title={'Chats'} 
-        value={3}
+        value={stats?.totalChatsCount || 0}
         Icon={<GroupIcon/>}
         />
         <Widget 
         title={'Messages'} 
-        value={455}
+        value={stats?.messagesCount || 0}
         Icon={<MessageIcon/>}
         />
     </Stack>
-  return (
+  return isLoading?<LayoutLoader/>:(
+
     <Container
 
     sx={{
@@ -123,7 +139,7 @@ const Dashboard = () => {
         variant='h4'
         
         >Last Messages</Typography>
-        <LineChart value={[10,23,44,33,80,22,14]}/>
+        <LineChart value={stats?.messagesChart || []}/>
         </Paper>
         <Paper
         sx={{
@@ -139,7 +155,7 @@ const Dashboard = () => {
         >
         <DoughnutChart 
         labels={['Single Chats','Group Chats']}
-        value = {[23,66]}
+        value = {[stats?.totalChatsCount - stats?.groupsCount || 0,stats?.groupsCount || 0]}
         />
         
         <Stack

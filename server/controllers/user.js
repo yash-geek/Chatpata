@@ -1,6 +1,6 @@
 import { compare } from 'bcrypt';
 import { TryCatch } from '../middlewares/error.js';
-import { cookieOptions, emitEvent, sendToken } from '../utils/features.js';
+import { cookieOptions, emitEvent, sendToken, uploadFilesToCloudinary } from '../utils/features.js';
 import { ErrorHandler } from '../utils/utility.js';
 
 //models
@@ -17,9 +17,10 @@ const newUser = TryCatch(
         const file = req.file
         if (!file)
             return next(new ErrorHandler('Please upload avatar', 400))
+        const result = await uploadFilesToCloudinary([file])
         const avatar = {
-            public_id: 'ce38c3i',
-            url: 'd3ndndnnddddd.ce',
+            public_id: result[0].public_id,
+            url: result[0].url,
         }
         const user = await User.create({
             name,
@@ -63,25 +64,30 @@ const logout = TryCatch(async (req, res) => {
 const searchUser = TryCatch(async (req, res) => {
     const { name = "" } = req.query
     // finding all non group chats with me as a member
+    const username = name;
     const myChats = await Chat.find({
         groupChat: false,
         members: req.user,
     })
     //all users who are my direct friends or i have chatted with
     const allUsersFromMyChats = myChats.flatMap((chat) => chat.members);
-
+    allUsersFromMyChats.push(req.user);
 
     const allUsersExceptMyAndFriends = await User.find({
         _id: { $nin: allUsersFromMyChats },
-        name: { $regex: name, $options: "i" },
+        $or: [
+            { name: { $regex: name, $options: "i" } },
+            { username: { $regex: username, $options: "i" } }
+        ]
         //case insensitive search}
     });
 
-    const users = allUsersExceptMyAndFriends.map(({ _id, name, avatar }) => (
+    const users = allUsersExceptMyAndFriends.map(({ _id, name, avatar, username }) => (
         {
             _id,
             name,
             avatar: avatar.url,
+            username,
         }
     ))
 

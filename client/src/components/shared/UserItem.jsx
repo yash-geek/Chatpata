@@ -1,15 +1,22 @@
 import { Avatar, IconButton, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import React, { memo } from 'react'
 import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
-const UserItem = ({ 
+import { transformImage } from '../../lib/features';
+import { bluey } from '../../constants/color';
+const UserItem = ({
     user,
+    isOwner = false,
+    isAdmin = false,
     handler,
-    handlerIsLoading, 
+    handlerIsLoading,
     isAdded = false,
-    styling = {}
+    styling = {},
+    displayUserName = false,
 }) => {
-    const { _id, name, avatar } = user;
-    
+
+
+    const { _id, name, avatar, username } = user;
+
 
     return (
         <ListItem >
@@ -19,14 +26,12 @@ const UserItem = ({
                 spacing={'1rem'}
                 width={'100%'}
                 {...styling}
-                >
-                <Avatar src={avatar} />
-                <Typography
-                    variant='body1'
-
+            >
+                <Avatar src={transformImage(avatar)} />
+                <Stack
+                    direction={'column'}
                     sx={{
                         flexGrow: 1,
-                        overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         display: '-webkit-box',
                         WebkitLineClamp: 1,
@@ -34,14 +39,42 @@ const UserItem = ({
                         width: '100%',
                     }}
                 >
-                    {name}
-                </Typography>
+                    <Stack>
+                    <Typography
+                        variant='body1'
+                    >
+                        {name}
+                    </Typography>
+                    {
+                        isAdmin && 
+                        <Typography 
+                        color={bluey}
+                        width={'100%'}
+                        textAlign={'left'}
+                        variant='caption'>
+                            {isOwner ? "Owner":"Admin"}
+                        </Typography>
+                    }
+                    </Stack>
+                    <Typography
+                        variant='caption'
+                        sx={{
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            maxWidth: '150px', // or whatever fits your layout best
+                            display: displayUserName ? 'block' : 'none',
+                        }}
+                    >
+                        @{username}
+                    </Typography>
+                </Stack>
                 <IconButton
 
                     size='small'
                     sx={{
                         backgroundColor: isAdded ? 'error.main' : 'primary.main',
-                        color: 'white' ,
+                        color: 'white',
                         '&:hover': {
                             backgroundColor: isAdded ? 'error.dark' : 'primary.dark',
                         },

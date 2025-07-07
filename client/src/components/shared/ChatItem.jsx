@@ -1,8 +1,10 @@
-import React, { memo } from 'react'
-import { Link } from '../styles/StyledComponents'
-import { Avatar, Box, Stack, Typography } from '@mui/material'
 import CircleRoundedIcon from '@mui/icons-material/CircleRounded';
+import { Box, Stack, Typography } from '@mui/material';
+import { memo } from 'react';
+import { bluey } from '../../constants/color';
+import { Link } from '../styles/StyledComponents';
 import AvatarCard from './AvatarCard';
+import {motion} from 'framer-motion'
 const ChatItem = (
     {
         avatar = [],
@@ -17,12 +19,29 @@ const ChatItem = (
 
     }
 ) => {
+
+
+
+    
     return (
         <Link 
         sx={{padding:0}}
         to={`/chat/${_id}`} 
         onContextMenu={(e)=>{handleDeleteChat(e,_id,groupChat)}}>
-            <div style={{
+            <motion.div
+            initial={{
+                opacity:0,
+                y:'-100%'
+            }}
+            whileInView={{
+                opacity:1,
+                y:0,
+            }}
+            transition={{
+                delay:index/50,
+            }}
+            
+            style={{
                 display:'flex',
                 gap:'1rem',
                 alignItems:'center',
@@ -38,7 +57,7 @@ const ChatItem = (
                 </Typography>
                 {
                     newMessageAlert && (
-                        <Typography sx={{
+                        <Typography color={bluey} sx={{
                             display:'flex',
                             alignItems:'center',
                             gap:'0.4rem',}}>
@@ -61,11 +80,11 @@ const ChatItem = (
                     position:'absolute',
                     top:'50%',
                     right:'1rem',
-                    transform:'translate(-50%)',
+                    transform:'translateY(-50%)',
                 }}  />
             }
                 
-            </div>
+            </motion.div>
         </Link>
     )
 }

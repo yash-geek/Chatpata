@@ -1,37 +1,49 @@
-import { AppBar, Backdrop, Box, IconButton, Toolbar, Tooltip, Typography } from '@mui/material'
-import React, { lazy, Suspense, useState } from 'react'
-import { bluey } from '../../constants/color'
-import { Group as GroupIcon, Menu as MenuIcon, Search as SearchIcon, Add as AddIcon, Logout as LogoutIcon, Notifications as NotificationsIcon, BackHandTwoTone } from '@mui/icons-material'
+import { Add as AddIcon, Group as GroupIcon, Logout as LogoutIcon, Menu as MenuIcon, Notifications as NotificationsIcon, Search as SearchIcon } from '@mui/icons-material'
+import { AppBar, Backdrop, Badge, Box, IconButton, Toolbar, Tooltip, Typography } from '@mui/material'
+import axios from 'axios'
+import { lazy, Suspense, useState } from 'react'
+import toast from 'react-hot-toast'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { bluey } from '../../constants/color'
+import { server } from '../../constants/config'
+import { userNotExists } from '../../redux/reducers/auth'
+import { setIsMobile, setIsNewGroup, setIsNotification, setIsSearch } from '../../redux/reducers/misc'
+import { resetNotificationCount } from '../../redux/reducers/chat'
 const SearchDialog = lazy(() => import('../specific/SearchDialog'))
 const NotificationsDialog = lazy(() => import('../specific/NotificationsDialog'))
 const NewGroupDialog = lazy(() => import('../specific/NewGroupDialog'))
 const Header = () => {
 
   const navigate = useNavigate();
-  const [isMobile, setIsMobile] = useState(false);
-  const [isSearch, setIsSearch] = useState(false);
-  const [isNewGroup, setIsNewGroup] = useState(false);
-  const [isNotification, setIsNotification] = useState(false);
+  const dispatch = useDispatch();
+  const { isSearch, isNotification, isNewGroup } = useSelector(state => state.misc)
+  const { notificationCount } = useSelector(state => state.chat)
+  const handleMobile = () => dispatch(setIsMobile(true));
 
-  const handleMobile = () => {
-    setIsMobile((prev) => !prev);
-  }
-  const openSearch = () => {
-    setIsSearch((prev) => !prev)
-  }
+  const openSearch = () => dispatch(setIsSearch(true))
+
   const openNewGroup = () => {
-    setIsNewGroup((prev) => !prev);
+    dispatch(setIsNewGroup(true));
   }
 
   const openNotification = () => {
-    setIsNotification((prev) => !prev);
+    dispatch(setIsNotification(true));
+    dispatch(resetNotificationCount())
   }
 
   const navigateToGroup = () => navigate('/groups')
 
-  const logoutHandler = () => {
-    console.log('Logout')
+  const logoutHandler = async () => {
+    try {
+      const { data } = await axios.get(`${server}/api/v1/user/logout`, {
+        withCredentials: true
+      })
+      dispatch(userNotExists())
+      toast.success(data.message)
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Something went wrong")
+    }
   }
 
 
@@ -78,6 +90,7 @@ const Header = () => {
                 title={'Notifications'}
                 icon={<NotificationsIcon />}
                 onClick={openNotification}
+                value={notificationCount}
               />
               <IconBtn
                 title={'Logout'}
@@ -100,11 +113,13 @@ const Header = () => {
   )
 }
 
-const IconBtn = ({ title, icon, onClick }) => {
+const IconBtn = ({ title, icon, onClick, value }) => {
   return (
     <Tooltip title={title}>
       <IconButton color='inherit' size='large' onClick={onClick}>
-        {icon}
+        {
+          value?<Badge badgeContent={value} color='error'>{icon}</Badge>:icon
+        }
       </IconButton>
     </Tooltip>
   )
