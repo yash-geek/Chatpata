@@ -1,6 +1,6 @@
 # Chatpata
 
-A modern, real-time chat application built with React, Vite, Node.js, Socket.io, and MongoDB. Chatpata supports user authentication, group and direct messaging, live user presence, file uploads, and a responsive UI powered by MUI and TailwindCSS.
+A modern, real-time chat application built with React, Vite, Node.js, Socket.io, and MongoDB. Chatpata supports user authentication, group and direct messaging, live user presence, file uploads, and a responsive UI powered by MUI.
 
 ## Features
 
@@ -10,11 +10,11 @@ A modern, real-time chat application built with React, Vite, Node.js, Socket.io,
 - **Live User Presence:** See who's online, typing indicators.
 - **Media & File Uploads:** Share images and files (Cloudinary integration).
 - **Admin Dashboard:** View stats, manage users and chats.
-- **Responsive Design:** Mobile-first UI with MUI and TailwindCSS.
+- **Responsive Design:** Mobile-first UI with MUI.
 
 ## Technologies Used
 
-- **Frontend:** React, Vite, Redux Toolkit, MUI, TailwindCSS, Axios, Chart.js
+- **Frontend:** React, Vite, Redux Toolkit, MUI, Axios, Chart.js
 - **Backend:** Node.js, Express, MongoDB, Mongoose, Socket.io, Cloudinary
 - **Testing & Linting:** ESLint, React Testing Library (optional)
 - **Dev Tools:** dotenv, Prettier (recommended)
