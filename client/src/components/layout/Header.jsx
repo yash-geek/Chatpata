@@ -63,7 +63,7 @@ const Header = () => {
 
             <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
 
-              <IconButton color='inhert' onClick={handleMobile}>
+              <IconButton color='inherit' onClick={handleMobile}>
                 <MenuIcon />
               </IconButton>
             </Box>
